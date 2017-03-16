@@ -54,12 +54,7 @@ public class MainActivity extends AppCompatActivity {
         mWelcomeTextView = (TextView) findViewById(R.id.welcomeTextView);
 
         Button fetchButton = (Button) findViewById(R.id.fetchButton);
-        fetchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fetchWelcome();
-            }
-        });
+        fetchButton.setOnClickListener(v -> fetchWelcome());
 
         // Get Remote Config instance.
         // [START get_remote_config_instance]
@@ -106,22 +101,19 @@ public class MainActivity extends AppCompatActivity {
         // if cached parameter values are more than cacheExpiration seconds old.
         // See Best Practices in the README for more information.
         mFirebaseRemoteConfig.fetch(cacheExpiration)
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Fetch Succeeded",
-                                    Toast.LENGTH_SHORT).show();
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(MainActivity.this, "Fetch Succeeded",
+                                Toast.LENGTH_SHORT).show();
 
-                            // After config data is successfully fetched, it must be activated before newly fetched
-                            // values are returned.
-                            mFirebaseRemoteConfig.activateFetched();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Fetch Failed",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        displayWelcomeMessage();
+                        // After config data is successfully fetched, it must be activated before newly fetched
+                        // values are returned.
+                        mFirebaseRemoteConfig.activateFetched();
+                    } else {
+                        Toast.makeText(MainActivity.this, "Fetch Failed",
+                                Toast.LENGTH_SHORT).show();
                     }
+                    displayWelcomeMessage();
                 });
         // [END fetch_config_with_callback]
     }

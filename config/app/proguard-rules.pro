@@ -18,3 +18,4 @@
 
 -keepattributes EnclosingMethod
 -keepattributes InnerClasses
+-dontwarn java.lang.invoke.*
